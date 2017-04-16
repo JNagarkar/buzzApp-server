@@ -19,8 +19,9 @@ import java.util.Date;
 @Proxy(lazy = false)
 public class User {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+
+	private long id;
 
     private String name;
 
@@ -38,10 +39,18 @@ public class User {
 
 	private Date latestUpdated;
 
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	private String token;
 
 
-
-	public User(String name, String email, String contactNumber, Double latitude, Double longitude , Integer expectedTime, Integer radius, Date latestUpdated) {
+	public User(String name, String email, String contactNumber, Double latitude, Double longitude , Integer expectedTime, Integer radius, Date latestUpdated,String token) {
 
 		Calendar calendar = Calendar.getInstance();
 		this.name = name;
@@ -52,15 +61,12 @@ public class User {
 		this.expectedTime = expectedTime;
 		this.radius = radius;
 		this.latestUpdated = calendar.getTime();
+		this.token=token;
 	}
-
-
-
 
 	public User(){
 
 	}
-
 
 	public Double getLatitude() {
 		return latitude;
@@ -145,6 +151,8 @@ public class User {
 				", name='" + name + '\'' +
 				", email='" + email + '\'' +
 				", latitude=" + latitude +
+				", latestUpdated=" + latestUpdated +
+				", token='" + token + '\'' +
 				", longitude=" + longitude +
 				", contactNumber='" + contactNumber + '\'' +
 				", expectedTime=" + expectedTime +

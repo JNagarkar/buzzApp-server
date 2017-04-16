@@ -1,12 +1,13 @@
 package app;
-
+import static java.util.concurrent.TimeUnit.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 @RequestMapping(path="/crud/")
@@ -22,23 +23,36 @@ public class UserController {
 	@ResponseBody
 	public String createUser(@RequestBody User user){
 		User newUser = null;
-		try{
+
+		Iterable<User> abc = userRepository.findAll();
+
+		long existingId=-1;
+		boolean exists=false;
+		for(User currentUser: abc){
+			if(currentUser.getEmail().equals(user.getEmail())){
+				exists=true;
+				existingId=currentUser.getId();
+				System.out.println("Id of user"+currentUser.getEmail()+"  is"+currentUser.getId());
+				System.out.println("wont be added");
+				break;
+			}
+		}
+
+		if(!exists){
+			try{
 //			newUser= new User(user.getName(),user.getEmail(),user.getContactNumber(),user.getLatitude(),user.getLongitude(),user.getExpectedTime(),user.getRadius(),user.);
-			user.setLatestUpdated(new Date());
-			userRepository.save(user);
+				user.setLatestUpdated(new Date());
+				userRepository.save(user);
+
+				return String.valueOf(user.getId());
+			}
+			catch(Exception e){
+				logger.error(e.getMessage());
+				return e.getMessage();
+			}
 		}
-		catch(Exception e){
-			logger.error(e.getMessage());
-			return e.getMessage();
-		}
 
-
-
-
-		System.out.println("Haha:"+user.getLatestUpdated());
-		System.out.println("hihi:"+user.toString());
-
-	return String.valueOf(user.getLatestUpdated());
+		return String.valueOf(existingId);
 	}
 
 	// GetUserInfo
@@ -57,7 +71,7 @@ public class UserController {
 		}
 
 		if(possibleUser==null){
-			String errorMessage = "No user found by particular id"+id;
+			String errorMessage = "No user found by particular userID"+id;
 			logger.error(errorMessage);
 			return null;
 		}
@@ -67,16 +81,23 @@ public class UserController {
 
 
 	// Update user location values
-	@RequestMapping(value = "/user/update/location/{id}",method = RequestMethod.POST)
+	@RequestMapping(value = "/users/update/location",method = RequestMethod.POST)
 	@ResponseBody
-	public String updateLocation(long id, Double newLatitude, Double newLongitude){
+	public String updateLocation(@RequestBody HeartBeat heartBeat){
+
+		String id = heartBeat.getId();
 
 		User currentUser=null;
+		Double newLatitude = heartBeat.getLatitude();
+		Double newLongitude = heartBeat.getLongitude();
 
 		try{
-			currentUser = userRepository.findOne(id);
+			currentUser = userRepository.findOne(Long.valueOf(id));
 			currentUser.setLatitude(newLatitude);
 			currentUser.setLongitude(newLongitude);
+			currentUser.setLatestUpdated(new Date());
+			userRepository.save(currentUser);
+			System.out.println(newLatitude+":"+newLongitude+"    Updated Location of :"+currentUser.getName());
 		}
 		catch(Exception e){
 			logger.error(e.getMessage());
@@ -84,6 +105,67 @@ public class UserController {
 		}
 
 		return "Updated Location of :"+currentUser.getName();
+	}
+
+	// BroadCast user message to event
+	@RequestMapping(value = "/users/broadcast",method = RequestMethod.POST)
+	@ResponseBody
+	public String broadCastMessage(@RequestBody BroadCastEvent event) throws IOException {
+
+		try {
+			User currentUser=null;
+			String userID = event.getUserID();
+			PushNotificationHelper pushNotificationHelper = new PushNotificationHelper();
+
+			currentUser = userRepository.findOne(Long.valueOf(userID));
+			System.out.println(userID+"  userID");
+			if(currentUser==null){
+				System.out.println("Broadcasting user is null");
+			}
+
+
+			Iterable<User> userList = userRepository.findAll();
+			ArrayList<User> nearbyUsers = getNearbyUsers(currentUser,userList);
+
+			for(User demo: nearbyUsers){
+				System.out.println(demo.getName());
+				pushNotificationHelper.sendPushNotification(demo.getToken(),currentUser.getName());
+			}
+
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			return e.getMessage();
+		}
+		return "";
+	}
+
+	private ArrayList<User> getNearbyUsers(User currentUser, Iterable<User> userList) {
+
+			long expectedTime = currentUser.getExpectedTime();
+			long MAX_DURATION = MILLISECONDS.convert(expectedTime,MINUTES);
+
+			BroadCastUtil utility = new BroadCastUtil();
+			ArrayList<User> nearbyUsers = new ArrayList<>();
+
+			Double myLatitude = currentUser.getLatitude();
+		    Double myLongitude = currentUser.getLongitude();
+
+			System.out.println(myLatitude+":"+myLongitude+"   my location");
+
+				for(User user: userList){
+					long duration = currentUser.getLatestUpdated().getTime() - user.getLatestUpdated().getTime();
+					if(duration < MAX_DURATION){
+						Double userLatittude = user.getLatitude();
+						Double userLongitude = user.getLongitude();
+						System.out.println(userLatittude+":"+userLongitude+"   my location");
+						if(utility.distance(myLatitude,myLongitude,userLatittude,userLongitude,'N') < 5.0){
+							nearbyUsers.add(user);
+						}
+					}
+				}
+				return nearbyUsers;
 	}
 
 
@@ -101,6 +183,10 @@ public class UserController {
 			}
 		return "User Deleted";
 	}
+
+
+
+
 
 	@RequestMapping(value="/user/add", method = RequestMethod.POST) // Map ONLY GET Requests
 	public @ResponseBody String addNewUser (@RequestParam String name
@@ -131,4 +217,43 @@ public class UserController {
 
 		return userRepository.findAll();
 	}
+
+
+
+	@RequestMapping("/events/fetch")
+	@ResponseBody
+	public EventList fetchEvents(@RequestBody EventFetcher eventFetcher){
+
+		EventList list = new EventList();
+
+		System.out.println(eventFetcher.toString());
+		String defaultRadius= eventFetcher.radius == null ? "5" : eventFetcher.radius;
+		Map<String, String> apiInputMap = new HashMap<>();
+
+		String latitude= (eventFetcher.latitude==null) ? "33.425510": eventFetcher.latitude;
+		String longitude=(eventFetcher.longitude==null) ? " -111.940005":eventFetcher.longitude;
+
+		String latLong = "\""+latitude+","+longitude+"\"";
+		apiInputMap.put("radius", defaultRadius);
+		apiInputMap.put("latlong",latLong);
+
+		List<Event> events = TicketMasterAPICaller.getEvents(apiInputMap);
+		list.setEventList(events);
+
+
+		for(Event currentEvent: events){
+			System.out.println(currentEvent.getName());
+		}
+		return list;
+	}
+
+
+
+
+
+
+
+
+
+
 }
