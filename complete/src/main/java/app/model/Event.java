@@ -1,18 +1,18 @@
-package app;
+package app.model;
 
 /**
  * Created by jaydatta on 4/13/17.
  */
 public class Event {
-    String id;
-    String name;
-    String imageURL;
-    String eventURL;
+    public String id;
+    public String name;
+    public String imageURL;
+    public String eventURL;
 
-    String startDate;
-    String startTime;
+    public String startDate;
+    public String startTime;
 
-    String venue;
+    public String venue;
 
     public Event(){
 

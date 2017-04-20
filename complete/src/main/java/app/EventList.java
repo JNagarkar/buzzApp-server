@@ -1,5 +1,7 @@
 package app;
 
+import app.model.Event;
+
 import java.util.List;
 
 /**
@@ -17,9 +19,5 @@ public class EventList {
     public void setEventList(List<Event> eventList) {
         this.eventList = eventList;
     }
-
-
-
-
 
 }

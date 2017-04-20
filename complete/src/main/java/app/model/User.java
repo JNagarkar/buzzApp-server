@@ -1,4 +1,4 @@
-package app;
+package app.model;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

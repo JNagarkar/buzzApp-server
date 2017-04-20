@@ -1,8 +1,8 @@
 package app;
 
+import app.model.User;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Entity;
 import java.util.List;
 
 /**

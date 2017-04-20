@@ -1,5 +1,7 @@
 package app;
 
+import app.model.User;
+
 import java.util.List;
 
 /**

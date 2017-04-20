@@ -1,12 +1,12 @@
-package app;
+package app.model;
 
 /**
  * Created by jaydatta on 4/15/17.
  */
 public class EventFetcher {
 
-    String latitude;
-    String longitude;
+    public String latitude;
+    public String longitude;
 
     public String getLatitude() {
         return latitude;
@@ -40,8 +40,8 @@ public class EventFetcher {
         this.userID = userID;
     }
 
-    String radius;
-    String userID;
+    public String radius;
+    public String userID;
 
     public EventFetcher(){
 

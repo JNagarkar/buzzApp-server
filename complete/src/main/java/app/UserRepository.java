@@ -1,5 +1,6 @@
 package app;
 
+import app.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
