@@ -13,6 +13,16 @@ public class Event {
     public String startTime;
 
     public String venue;
+    public String category;
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+
 
     public Event(){
 

@@ -6,10 +6,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import app.UserPersonalization;
+import app.controller.UserController;
 import app.model.Event;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +33,9 @@ public class TicketMasterAPICaller {
     private static final String EVENT_DETAILS_API_CALL_SUFFIX = new StringBuilder(".json?apikey=").append(API_KEY)
             .toString();
 
+
+    static final Logger logger = LogManager.getLogger(TicketMasterAPICaller.class.getName());
+
     /**
      * returns events based on input key-value pairs by calling event search
      * API.
@@ -35,31 +43,72 @@ public class TicketMasterAPICaller {
      * @param apiInputMap
      * @return
      */
-    public static List<Event> getEvents(Map<String, String> apiInputMap) {
+    public static List<Event> getEvents(Map<String, String> apiInputMap, ArrayList<UserPersonalization> personalizationArrayList) {
 
-        List<Event> events = null;
-
+        List<Event> events = new ArrayList<>();
         // create API call by appending key-values in API request format
+
+        HashSet<Event> eventSet = new HashSet<>();
+
+        if(!personalizationArrayList.isEmpty()){
+            for(UserPersonalization currentItem:personalizationArrayList){
+                if(currentItem.getCategory()!=null){
+                    StringBuilder APICall = new StringBuilder(EVENT_API_CALL_PREFIX);
+                    logger.info("Sending category:"+currentItem.getCategory());
+                    List<Event> currentEventList = new ArrayList<>();
+
+                    for (String key : apiInputMap.keySet()) {
+                        if (!"".equals(apiInputMap.get(key))) {
+                            APICall.append("&").append(key).append("=").append(apiInputMap.get(key).replace(" ", "%20"));
+                        }
+                    }
+                    APICall.append("&keyword=").append(currentItem.getCategory());
+                    logger.info("API Call:"+APICall.toString());
+                    try {
+                        currentEventList = extractEvents(getRespose(APICall.toString()));
+                    } catch (Exception e) {
+                        // generate empty response
+                        //           events = new ArrayList<>();
+                        // TODO: log events
+                        e.printStackTrace();
+                    }
+                    finally {
+                        for(Event currentEvent: currentEventList){
+                            if(currentEvent!=null && !eventSet.contains(currentEvent)){
+                                events.add(currentEvent);
+                                eventSet.add(currentEvent);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
         StringBuilder APICall = new StringBuilder(EVENT_API_CALL_PREFIX);
+        List<Event> currentEventList = new ArrayList<>();
         for (String key : apiInputMap.keySet()) {
             if (!"".equals(apiInputMap.get(key))) {
                 APICall.append("&").append(key).append("=").append(apiInputMap.get(key).replace(" ", "%20"));
             }
         }
-
-
-        System.out.println("API Call:"+APICall.toString());
-
+        logger.info("API Call:"+APICall.toString());
         try {
-            events = extractEvents(getRespose(APICall.toString()));
+            currentEventList = extractEvents(getRespose(APICall.toString()));
         } catch (Exception e) {
-
-            // generate empty response
-            events = new ArrayList<>();
-
             // TODO: log events
             e.printStackTrace();
         }
+        finally {
+            for(int i=0; i < Math.min(currentEventList.size()-1,5);i++){
+                Event currentEvent = currentEventList.get(i);
+                if(currentEvent!=null && !eventSet.contains(currentEvent)){
+                    events.add(currentEvent);
+                    eventSet.add(currentEvent);
+                }
+            }
+        }
+
         return events;
     }
 
@@ -92,22 +141,28 @@ public class TicketMasterAPICaller {
 
         List<Event> events = new ArrayList<>();
 
-        JSONObject embeddedObj = jsonObject.getJSONObject("_embedded");
-        JSONArray eventsArray = embeddedObj.getJSONArray("events");
+     try{
+         JSONObject embeddedObj = jsonObject.getJSONObject("_embedded");
+         JSONArray eventsArray = embeddedObj.getJSONArray("events");
 
-        for (int i = 0; i < eventsArray.length(); i++) {
+         for (int i = 0; i < eventsArray.length(); i++) {
 
-            Event event = null;
-            try {
-                event = TicketMasterAPICaller.getEventDetails(eventsArray.getJSONObject(i).getString("id"));
-                if (null != event) {
-                    events.add(event);
-                }
-            } catch (IOException e) {
-                // TODO Log event
-                e.printStackTrace();
-            }
-        }
+             Event event = null;
+             try {
+                 event = TicketMasterAPICaller.getEventDetails(eventsArray.getJSONObject(i).getString("id"));
+                 if (null != event) {
+                     events.add(event);
+                 }
+             } catch (IOException e) {
+                 // TODO Log event
+                 e.printStackTrace();
+             }
+         }
+
+     }
+     catch(Exception e){
+         e.printStackTrace();
+     }
 
         return events;
     }
@@ -168,6 +223,18 @@ public class TicketMasterAPICaller {
                 // TODO: Log NOo event URL present
             }
 
+
+            try{
+                JSONArray categories = eventDetailsJSONObj.getJSONObject("_embedded").getJSONArray("categories");
+                for(int i=0;  i < categories.length();i++){
+                    event.setCategory((String)categories.getJSONObject(i).get("name"));
+                    logger.info((String)categories.getJSONObject(i).get("name")+" is the event category");
+                }
+
+
+            }catch (Exception e){
+
+            }
             try {
                 JSONObject startTiming = eventDetailsJSONObj.getJSONObject("dates").getJSONObject("start");
 
