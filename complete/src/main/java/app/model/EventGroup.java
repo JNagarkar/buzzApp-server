@@ -15,7 +15,7 @@ import java.util.Date;
 @Proxy(lazy = false)
 public class EventGroup {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     public long id;
     public String senderName;
@@ -32,6 +32,27 @@ public class EventGroup {
     public int signalValidFor;
 
     public String responderContactNumber;
+    public String responderContactEmail;
+    public long broadCastTime;
+
+    public EventGroup(String senderName, String responderName, String senderToken, String responderToken, String eventID, String eventName, Date responderRespondedAt, int signalValidFor, Long broadcastTime, String responderContactNumber, String responderContactEmail) {
+        this.senderName = senderName;
+        this.responderName = responderName;
+        this.senderToken = senderToken;
+        this.responderToken = responderToken;
+        this.eventID = eventID;
+        this.eventName = eventName;
+        this.responderRespondedAt = responderRespondedAt;
+        this.signalValidUntil = responderRespondedAt.getTime() + signalValidFor * 60 * 1000;
+        this.signalValidFor = signalValidFor;
+        this.broadCastTime = broadcastTime;
+        this.responderContactNumber = responderContactNumber;
+        this.responderContactEmail = responderContactEmail;
+    }
+
+    public EventGroup() {
+
+    }
 
     public String getResponderContactNumber() {
         return responderContactNumber;
@@ -49,8 +70,6 @@ public class EventGroup {
         this.responderContactEmail = responderContactEmail;
     }
 
-    public String responderContactEmail;
-
     public long getBroadCastTime() {
         return broadCastTime;
     }
@@ -59,22 +78,6 @@ public class EventGroup {
         this.broadCastTime = broadCastTime;
     }
 
-    public long broadCastTime;
-
-    public EventGroup(String senderName, String responderName, String senderToken, String responderToken, String eventID, String eventName, Date responderRespondedAt, int signalValidFor, Long broadcastTime,String responderContactNumber,String responderContactEmail) {
-        this.senderName = senderName;
-        this.responderName = responderName;
-        this.senderToken = senderToken;
-        this.responderToken = responderToken;
-        this.eventID = eventID;
-        this.eventName = eventName;
-        this.responderRespondedAt = responderRespondedAt;
-        this.signalValidUntil = responderRespondedAt.getTime() + signalValidFor*60*1000;
-        this.signalValidFor = signalValidFor;
-        this.broadCastTime = broadcastTime;
-        this.responderContactNumber = responderContactNumber;
-        this.responderContactEmail = responderContactEmail;
-    }
     public String getSenderName() {
         return senderName;
     }
@@ -145,10 +148,6 @@ public class EventGroup {
 
     public void setSignalValidFor(int signalValidFor) {
         this.signalValidFor = signalValidFor;
-    }
-
-    public EventGroup(){
-
     }
 
 }

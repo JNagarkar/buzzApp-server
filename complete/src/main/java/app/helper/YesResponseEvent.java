@@ -1,6 +1,4 @@
-package app.model;
-
-import app.model.Event;
+package app.helper;
 
 /**
  * Created by jaydatta on 4/17/17.
@@ -13,6 +11,17 @@ public class YesResponseEvent {
     //Stored the time at which event was broadcasted : absolutely required.
     Long broadCastTime;
 
+    public YesResponseEvent() {
+
+    }
+
+    public YesResponseEvent(String senderID, Event event, String responderID, Long broadCastTime) {
+        this.senderID = senderID;
+        this.event = event;
+        this.responderID = responderID;
+        this.broadCastTime = broadCastTime;
+    }
+
     public Long getBroadCastTime() {
         return broadCastTime;
     }
@@ -20,20 +29,6 @@ public class YesResponseEvent {
     public void setBroadCastTime(Long broadCastTime) {
         this.broadCastTime = broadCastTime;
     }
-
-
-
-    public YesResponseEvent(){
-
-    }
-
-    public YesResponseEvent(String senderID, Event event, String responderID,Long broadCastTime) {
-        this.senderID = senderID;
-        this.event = event;
-        this.responderID = responderID;
-        this.broadCastTime = broadCastTime;
-    }
-
 
     public String getSenderID() {
         return senderID;

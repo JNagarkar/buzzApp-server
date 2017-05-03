@@ -1,7 +1,7 @@
 package app.controller;
 
-import app.model.User;
 import app.UserDao;
+import app.model.User;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,25 +17,23 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping(value="/broadCast")
+@RequestMapping(value = "/broadCast")
 public class BroadCastController {
 
+    public Logger logger = LogManager.getLogger(BroadCastController.class);
     @Autowired
     private UserDao userDao;
 
-    public Logger logger = LogManager.getLogger(BroadCastController.class);
-
-
-    @RequestMapping(value="/close/{radius}")
+    @RequestMapping(value = "/close/{radius}")
     @ResponseBody
-    public List<User>  getNearbyUsers(Double latitude, Double longitude, Integer radius){
+    public List<User> getNearbyUsers(Double latitude, Double longitude, Integer radius) {
         List<User> allUsers = null;
         List<User> nearbyUsers = null;
-        try{
+        try {
             allUsers = userDao.getAllUsers();
-            nearbyUsers = userDao.getAdjacentUsers(allUsers,latitude, longitude,radius);
+            nearbyUsers = userDao.getAdjacentUsers(allUsers, latitude, longitude, radius);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
         }

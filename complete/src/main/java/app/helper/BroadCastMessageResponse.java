@@ -1,4 +1,4 @@
-package app.model;
+package app.helper;
 
 /**
  * Created by jaydatta on 4/17/17.
@@ -13,7 +13,7 @@ public class BroadCastMessageResponse {
         this.broadCastEventCurrentTime = broadCastEventCurrentTime;
     }
 
-    public BroadCastMessageResponse(){
+    public BroadCastMessageResponse() {
 
     }
 
@@ -32,9 +32,6 @@ public class BroadCastMessageResponse {
     public void setBroadCastEventCurrentTime(long broadCastEventCurrentTime) {
         this.broadCastEventCurrentTime = broadCastEventCurrentTime;
     }
-
-
-
 
 
 }

@@ -1,4 +1,4 @@
-package app.model;
+package app.helper;
 
 /**
  * Created by jaydatta on 4/15/17.
@@ -7,6 +7,19 @@ public class EventFetcher {
 
     public String latitude;
     public String longitude;
+    public String radius;
+    public String userID;
+
+    public EventFetcher() {
+
+    }
+
+    public EventFetcher(String latitude, String longitude, String radius, String userID) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.radius = radius;
+        this.userID = userID;
+    }
 
     public String getLatitude() {
         return latitude;
@@ -39,21 +52,6 @@ public class EventFetcher {
     public void setUserID(String userID) {
         this.userID = userID;
     }
-
-    public String radius;
-    public String userID;
-
-    public EventFetcher(){
-
-    }
-
-    public EventFetcher(String latitude, String longitude, String radius,String userID) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.radius = radius;
-        this.userID=userID;
-    }
-
 
     @Override
     public String toString() {

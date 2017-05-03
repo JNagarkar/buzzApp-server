@@ -1,4 +1,4 @@
-package app;
+package app.helper;
 
 /**
  * Created by jaydatta on 4/17/17.
@@ -12,16 +12,6 @@ public class UserFetcher {
     //This is the time at which the broadcaster has broadcasted the event
     Long broadCastTime;
 
-    public Long getBroadCastTime() {
-        return broadCastTime;
-    }
-
-    public void setBroadCastTime(Long broadCastTime) {
-        this.broadCastTime = broadCastTime;
-    }
-
-
-
     public UserFetcher(String senderID, String senderToken, String eventID, Long broadCastTime) {
         this.senderID = senderID;
         this.senderToken = senderToken;
@@ -29,9 +19,16 @@ public class UserFetcher {
         this.broadCastTime = broadCastTime;
     }
 
-    public UserFetcher(){}
+    public UserFetcher() {
+    }
 
+    public Long getBroadCastTime() {
+        return broadCastTime;
+    }
 
+    public void setBroadCastTime(Long broadCastTime) {
+        this.broadCastTime = broadCastTime;
+    }
 
     public String getSenderID() {
         return senderID;

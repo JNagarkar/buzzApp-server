@@ -1,4 +1,4 @@
-package app;
+package app.util;
 
 import org.hibernate.annotations.Proxy;
 
@@ -14,9 +14,21 @@ import javax.persistence.Id;
 @Proxy(lazy = false)
 public class UserPersonalization {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     public long id;
+    public String userID;
+    public String category;
+
+    public UserPersonalization(String userID, String category) {
+        this.userID = userID;
+        this.category = category;
+    }
+
+    public UserPersonalization() {
+
+    }
+
     public String getUserID() {
         return userID;
     }
@@ -31,17 +43,5 @@ public class UserPersonalization {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String userID;
-    public String category;
-
-    public UserPersonalization(String userID, String category) {
-        this.userID = userID;
-        this.category = category;
-    }
-
-    public UserPersonalization(){
-
     }
 }

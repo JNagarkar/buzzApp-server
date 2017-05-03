@@ -1,4 +1,4 @@
-package app.model;
+package app.helper;
 
 /**
  * Created by jaydatta on 4/13/17.
@@ -7,6 +7,8 @@ public class HeartBeat {
 
 
     public String id;
+    public Double latitude;
+    public Double longitude;
 
     public String getId() {
         return id;
@@ -31,9 +33,6 @@ public class HeartBeat {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
-
-    public Double latitude;
-    public Double longitude;
 
 
 }

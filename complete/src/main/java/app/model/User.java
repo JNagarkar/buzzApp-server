@@ -1,17 +1,11 @@
 package app.model;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,145 +13,136 @@ import java.util.Date;
 @Proxy(lazy = false)
 public class User {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-	private long id;
+    private long id;
 
     private String name;
 
     private String email;
 
-	private Double latitude;
-
-	public Date getLatestUpdated() {
-		return latestUpdated;
-	}
-
-	public void setLatestUpdated(Date latestUpdated) {
-		this.latestUpdated = latestUpdated;
-	}
-
-	private Date latestUpdated;
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	private String token;
+    private Double latitude;
+    private Date latestUpdated;
+    private String token;
+    private Double longitude;
+    private String contactNumber;
+    private Integer expectedTime;
+    private Integer radius;
 
 
-	public User(String name, String email, String contactNumber, Double latitude, Double longitude , Integer expectedTime, Integer radius, Date latestUpdated,String token) {
+    public User(String name, String email, String contactNumber, Double latitude, Double longitude, Integer expectedTime, Integer radius, Date latestUpdated, String token) {
 
-		Calendar calendar = Calendar.getInstance();
-		this.name = name;
-		this.email = email;
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.contactNumber = contactNumber;
-		this.expectedTime = expectedTime;
-		this.radius = radius;
-		this.latestUpdated = calendar.getTime();
-		this.token=token;
-	}
+        Calendar calendar = Calendar.getInstance();
+        this.name = name;
+        this.email = email;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.contactNumber = contactNumber;
+        this.expectedTime = expectedTime;
+        this.radius = radius;
+        this.latestUpdated = calendar.getTime();
+        this.token = token;
+    }
 
-	public User(){
+    public User() {
 
-	}
+    }
 
-	public Double getLatitude() {
-		return latitude;
-	}
+    public Date getLatestUpdated() {
+        return latestUpdated;
+    }
 
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
+    public void setLatestUpdated(Date latestUpdated) {
+        this.latestUpdated = latestUpdated;
+    }
 
-	private Double longitude;
+    public String getToken() {
+        return token;
+    }
 
-	private String contactNumber;
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-	public Double getLongitude() {
-		return longitude;
-	}
+    public Double getLatitude() {
+        return latitude;
+    }
 
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
-	}
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
 
-	public String getContactNumber() {
-		return contactNumber;
-	}
+    public Double getLongitude() {
+        return longitude;
+    }
 
-	public void setContactNumber(String contactNumber) {
-		this.contactNumber = contactNumber;
-	}
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
 
-	public Integer getExpectedTime() {
-		return expectedTime;
-	}
+    public String getContactNumber() {
+        return contactNumber;
+    }
 
-	public void setExpectedTime(Integer expectedTime) {
-		this.expectedTime = expectedTime;
-	}
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
 
-	public Integer getRadius() {
-		return radius;
-	}
+    public Integer getExpectedTime() {
+        return expectedTime;
+    }
 
-	public void setRadius(Integer radius) {
-		this.radius = radius;
-	}
+    public void setExpectedTime(Integer expectedTime) {
+        this.expectedTime = expectedTime;
+    }
 
-	private Integer expectedTime;
+    public Integer getRadius() {
+        return radius;
+    }
 
-	private Integer radius;
+    public void setRadius(Integer radius) {
+        this.radius = radius;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
 
-
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-
-	@Override
-	public String toString() {
-		return "User{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", email='" + email + '\'' +
-				", latitude=" + latitude +
-				", latestUpdated=" + latestUpdated +
-				", token='" + token + '\'' +
-				", longitude=" + longitude +
-				", contactNumber='" + contactNumber + '\'' +
-				", expectedTime=" + expectedTime +
-				", radius=" + radius +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", latitude=" + latitude +
+                ", latestUpdated=" + latestUpdated +
+                ", token='" + token + '\'' +
+                ", longitude=" + longitude +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", expectedTime=" + expectedTime +
+                ", radius=" + radius +
+                '}';
+    }
 }
 

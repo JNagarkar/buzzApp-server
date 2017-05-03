@@ -1,4 +1,4 @@
-package app;
+package app.query;
 
 import app.model.EventGroup;
 import org.springframework.data.repository.CrudRepository;

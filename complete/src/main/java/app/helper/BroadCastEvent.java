@@ -1,4 +1,4 @@
-package app.model;
+package app.helper;
 
 import java.util.Date;
 
@@ -8,6 +8,19 @@ import java.util.Date;
 public class BroadCastEvent {
 
     public String userID;
+    public Event event;
+    public Date currentTime;
+    public String personalMessage;
+
+    public BroadCastEvent(String userID, Event event, Date currentTime) {
+        this.userID = userID;
+        this.event = event;
+        this.currentTime = currentTime;
+    }
+
+    public BroadCastEvent() {
+
+    }
 
     public String getUserID() {
         return userID;
@@ -25,10 +38,6 @@ public class BroadCastEvent {
         this.event = event;
     }
 
-    public Event event;
-
-    public Date currentTime;
-
     public Date getCurrentTime() {
         return currentTime;
     }
@@ -37,24 +46,12 @@ public class BroadCastEvent {
         this.currentTime = currentTime;
     }
 
-    public String personalMessage;
-
     public String getPersonalMessage() {
         return personalMessage;
     }
 
     public void setPersonalMessage(String personalMessage) {
         this.personalMessage = personalMessage;
-    }
-
-    public BroadCastEvent(String userID, Event event, Date currentTime) {
-        this.userID = userID;
-        this.event = event;
-        this.currentTime = currentTime;
-    }
-
-    public BroadCastEvent(){
-
     }
 
 }

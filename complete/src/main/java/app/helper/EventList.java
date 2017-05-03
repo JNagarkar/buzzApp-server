@@ -1,6 +1,4 @@
-package app;
-
-import app.model.Event;
+package app.helper;
 
 import java.util.List;
 

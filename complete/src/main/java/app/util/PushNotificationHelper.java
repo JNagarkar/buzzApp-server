@@ -1,7 +1,7 @@
 package app.util;
 
-import app.model.BroadCastEvent;
-import app.model.Event;
+import app.helper.BroadCastEvent;
+import app.helper.Event;
 import app.model.User;
 import org.json.JSONObject;
 
@@ -18,8 +18,9 @@ import java.net.URL;
 public class PushNotificationHelper {
 
 
-//    public final static String AUTH_KEY_FCM = "AAAACauqcpo:APA91bECyglxihkr6ctR8BqNPhI1ZHLAeYc_1Q4_RB1sJy3mrEatU34Gccmvzhmpbj2nqfDF0U1Gm-48H2onO3B6Py8EXI2cVNAJXag_efLlZ3NmAZpf3y66Wtgh-lNhv_ac7kPxThhs";
-public final static String AUTH_KEY_FCM = "AAAAj3wuWXY:APA91bHxxstkm7NQO8GhgaJOc0swxpnHITFuik74wEpof9fsd3DqT_pCjGBM66spHzh-iKdul-FFwYGPt1ibrpxE8-2tAJKUIbeuvtB3BcrEfL8QmSeOxy4gpAt7fBWE-zki7j5BNcyT";
+
+    // TODO: You may want to use your own FCM key or you can keep using this
+    public final static String AUTH_KEY_FCM = "YOUR_FCM_KEY_HERE";
     public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
 
     public static String sendPushNotification(String deviceToken, User sender, Event event, BroadCastEvent broadCastMessageFromSender)

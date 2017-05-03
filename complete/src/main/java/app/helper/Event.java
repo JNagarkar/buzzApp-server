@@ -1,21 +1,10 @@
-package app.model;
-
-import org.hibernate.annotations.Proxy;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+package app.helper;
 
 /**
- * Created by jaydatta on 4/17/17.
- */@Entity // This tells Hibernate to make a table out of this class
-@Proxy(lazy = false)
-public class DummyEvent {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-
-    public long id;
+ * Created by jaydatta on 4/13/17.
+ */
+public class Event {
+    public String id;
     public String name;
     public String imageURL;
     public String eventURL;
@@ -24,21 +13,29 @@ public class DummyEvent {
     public String startTime;
 
     public String venue;
+    public String category;
 
-    public DummyEvent(){
+    public Event() {
 
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public Event(String id) {
         this.id = id;
     }
 
-    public DummyEvent(Long id) {
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -95,13 +92,13 @@ public class DummyEvent {
         this.venue = venue;
     }
 
-/*    @Override
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
-    }*/
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -112,11 +109,11 @@ public class DummyEvent {
         if (getClass() != obj.getClass())
             return false;
         Event other = (Event) obj;
-        /*if (id == null) {
+        if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
-            return false;*/
+            return false;
         return true;
     }
 
