@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class TicketMasterAPICaller {
     static final Logger logger = LogManager.getLogger(TicketMasterAPICaller.class.getName());
-    private static final String API_KEY = "YOUR_TICKETMASTER_API_KEY_HERE";
+    private static final String API_KEY = "SX2DFwa5BMC2nQX1RwGq9idXI4HCBrgZ";
     private static final String EVENT_API_CALL_PREFIX = new StringBuilder(
             "https://app.ticketmaster.com/discovery/v1/events.json?apikey=").append(API_KEY).toString();
     private static final String EVENT_DETAILS_API_CALL_PREFIX = "https://app.ticketmaster.com/discovery/v1/events/";

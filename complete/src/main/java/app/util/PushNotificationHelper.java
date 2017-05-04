@@ -20,7 +20,7 @@ public class PushNotificationHelper {
 
 
     // TODO: You may want to use your own FCM key or you can keep using this
-    public final static String AUTH_KEY_FCM = "YOUR_FCM_KEY_HERE";
+    public final static String AUTH_KEY_FCM = "AAAAj3wuWXY:APA91bHxxstkm7NQO8GhgaJOc0swxpnHITFuik74wEpof9fsd3DqT_pCjGBM66spHzh-iKdul-FFwYGPt1ibrpxE8-2tAJKUIbeuvtB3BcrEfL8QmSeOxy4gpAt7fBWE-zki7j5BNcyT";
     public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
 
     public static String sendPushNotification(String deviceToken, User sender, Event event, BroadCastEvent broadCastMessageFromSender)
